@@ -16,6 +16,7 @@
   "author": "Jonathan Sandgren",
   "license": "MIT",
   "devDependencies": {
+    "@types/faker": "^4.1.11",
     "@types/lodash": "^4.14.149",
     "@types/prompts": "^2.0.5",
     "@types/socket.io": "^2.1.4",
@@ -25,6 +26,7 @@
   },
   "dependencies": {
     "@slack/bolt": "^2.0.0",
+    "faker": "^4.1.0",
     "lodash": "^4.17.15",
     "prompts": "^2.3.2",
     "socket.io": "^2.3.0"

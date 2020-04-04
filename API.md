@@ -7,7 +7,7 @@ Socket.io användning:
   const socket = io('https://ec3c1d00.ngrok.io'); //min lokala dator, ska senare vara https://api.dothemath.app
   
   socket.on('connect', () => {
-    socket.emit('send_message', 'Message from the web');
+    socket.emit('send_message', { text: 'Message from the web!' });
   });
 </script>
 ```
@@ -48,5 +48,21 @@ name | string | Meddelandets avsändare
 ```javascript
 socket.on('message', ({text, name}) => {
   console.log(`${name}: ${text}`);
+});
+```
+
+### channel_list
+
+Skickar en array med object av formen:
+Name | Type | Description
+--- | --- | ---
+name | string | 
+id | string | 
+
+```javascript
+socket.on('channel_list', channels => {
+  channels.forEach(channel => {
+    console.log(`${channel.id}: ${channel.name}`)
+  });
 });
 ```

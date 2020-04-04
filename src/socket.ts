@@ -1,5 +1,6 @@
 import http from 'http';
 import socketIO from 'socket.io';
+import faker from 'faker';
 
 import AppController from './app';
 
@@ -32,8 +33,8 @@ class SocketController {
     // listen to messages sent from frontend, call appropriate method on appcontroller 
 
     this.io.on('connection', socket => {
-      console.log('socket connected');
-      console.log(socket.id);
+
+      this.sendChannelList(socket.id);
 
       socket.on('send_message', ({ text }: MessageData) => {
         this.controller.handleMessageFromClient({
@@ -51,12 +52,31 @@ class SocketController {
 
       socket.on('disconnect', () => {
         this.controller.dropSession(socket.id);
-      })
+      });
+
+
+      const tutor = faker.name.firstName();
+      setInterval(() => {
+        socket.emit('message', {
+          text: faker.lorem.sentences(3);
+          name: tutor
+        });
+      }, 5000);
+  
     })
   }
 
   async start() {
     this.server.listen(3001);
+  }
+
+  async sendChannelList (socketId: string) {
+    const channels = this.controller.getChannels();
+    const socket = this.io.sockets.sockets[socketId];
+
+    if (socket) {
+      socket.emit('channel_list', channels);
+    }
   }
 
   async sendMessage () {

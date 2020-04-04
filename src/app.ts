@@ -49,6 +49,13 @@ class AppController {
     _.remove(this.sessions, session => session.socketId === socketId);
   }
 
+  getChannels() {
+    return [
+      { name: 'bot-test', id: 'C0111SXA24T'},
+      { name: 'bot-test-2', id: 'C011ENW7TJQ'}
+    ]
+  }
+
   async handleMessageFromClient ({ message, socketId }: HandleMessageFromClientOptions) {
     
     const session = this.sessions.find(s => s.socketId === socketId);
