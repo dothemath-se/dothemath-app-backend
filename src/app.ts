@@ -17,8 +17,14 @@ interface EstablishSessionOptions {
 }
 
 interface HandleMessageFromClientOptions {
-  message: string;
+  text: string;
   socketId: string;
+}
+
+interface HandleMessageFromSlackOptions {
+  text: string;
+  sender: string;
+  threadId: string;
 }
 
 class AppController {
@@ -55,7 +61,15 @@ class AppController {
   }
 
   dropSession (socketId: string) {
-    _.remove(this.sessions, session => session.socketId === socketId);
+    const droppedSessions = _.remove(this.sessions, session => session.socketId === socketId);
+    if(droppedSessions.length > 0 && droppedSessions[0].threadId) {
+      const droppedSession = droppedSessions[0];
+      this.slack.postMessage({
+        channel: 'C0111SXA24T',
+        thread: droppedSession.threadId,
+        text: `${droppedSession.studentName} har kopplat från och kommer inte se nya meddelanden. Tack för din hjälp! 😁`
+      })
+    } 
   }
 
   getChannels() {
@@ -65,7 +79,7 @@ class AppController {
     ]
   }
 
-  async handleMessageFromClient ({ message, socketId }: HandleMessageFromClientOptions) {
+  async handleMessageFromClient ({ text, socketId }: HandleMessageFromClientOptions) {
     
     const session = this.sessions.find(s => s.socketId === socketId);
 
@@ -76,7 +90,7 @@ class AppController {
     const { studentName, threadId } = session;
 
     const response = await this.slack.postMessage({
-      text: message,
+      text: text,
       channel: 'C0111SXA24T',
       username: studentName ? studentName : 'Web Client',
       thread: threadId
@@ -94,11 +108,20 @@ class AppController {
      */
   }
 
-  async handleMessageFromSlack (data: any) {
+  async handleMessageFromSlack ({ text, threadId, sender}: HandleMessageFromSlackOptions) {
     /**
      * Called from SlackController
      * Find session via threadId. Send message to client via socketcontroller.sendMessage()
      */
+    const session = this.sessions.find(s => s.threadId === threadId);
+
+    if (session) {
+      this.socket.sendMessage({
+        socketId: session.socketId,
+        text,
+        sender
+      });
+    }
   }
 
   // development method to send questions through commandline 

@@ -2,6 +2,7 @@ import { App } from '@slack/bolt';
 import { WebAPICallResult } from '@slack/web-api';
 import AppController from './app';
 import { Server } from 'http';
+import _ from 'lodash';
 
 const SLACK_SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET;
 const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN;
@@ -32,13 +33,23 @@ class SlackController {
 
   initEventListeners () {
 
-    this.app.message(async ({message}) => {
-      this.controller.handleMessageFromSlack(message);
-    });
+    this.app.message(async ({message, context}) => {
+      
+      if (message.thread_ts) {
+        const userInfo = await this.app.client.users.info({
+          user: message.user,
+          token: context.botToken
+        }) as UserInfoResult;
+  
+        console.log(userInfo);
 
-
-    this.app.message('hej', async ({message, say}) => {
-      await say (`Hej <@${message.user}>!`)
+        
+        this.controller.handleMessageFromSlack({
+          sender: userInfo.user.profile.display_name,
+          text: message.text,
+          threadId: message.thread_ts
+        });
+      }
     });
   }
 
@@ -68,6 +79,14 @@ interface ChatPostMessageResult extends WebAPICallResult {
   ts: string;
   message: {
     text: string;
+  }
+}
+
+interface UserInfoResult extends WebAPICallResult {
+  user: {
+    profile: {
+      display_name: string
+    }
   }
 }
 

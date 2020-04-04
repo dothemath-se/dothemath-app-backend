@@ -12,6 +12,12 @@ interface MessageData {
   text: string;
 }
 
+interface SendMessageOptions {
+  socketId: string,
+  text: string,
+  sender: string
+}
+
 // Handles communication to/from frontend via websockets
 class SocketController {
 
@@ -37,7 +43,7 @@ class SocketController {
 
       socket.on('send_message', async ({ text }: MessageData, cb: any) => {
         await this.controller.handleMessageFromClient({
-          message: text,
+          text,
           socketId: socket.id
         });
         if (cb) cb();
@@ -54,16 +60,6 @@ class SocketController {
       socket.on('disconnect', () => {
         this.controller.dropSession(socket.id);
       });
-
-
-      const tutor = faker.name.firstName();
-      setInterval(() => {
-        socket.emit('message', {
-          text: faker.lorem.sentences(3),
-          name: tutor
-        });
-      }, 5000);
-  
     })
   }
 
@@ -76,8 +72,15 @@ class SocketController {
     }
   }
 
-  async sendMessage () {
-    
+  async sendMessage ({sender, text, socketId}: SendMessageOptions) {
+    const socket = this.io.sockets.sockets[socketId];
+
+    if (socket) {
+      socket.emit('message', {
+        text,
+        name: sender
+      });
+    }
   }
 }
 
