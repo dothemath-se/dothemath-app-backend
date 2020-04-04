@@ -38,6 +38,14 @@ text | string | *
 ```javascript
 socket.emit('send_message', { text: 'Message from the web!' });
 ```
+
+### get_channels 
+
+```javascript
+socket.emit('get_channels', channels => {
+  console.log(channels)
+});
+```
 ___
 
 ## Events

@@ -63,6 +63,13 @@ class SocketController {
       socket.on('disconnect', () => {
         this.controller.dropSession(socket.id);
       });
+
+      socket.on('get_channels', (cb: any) => {
+        if (cb && typeof cb === 'function') {
+          const channels = this.controller.getChannels();
+          cb(channels);
+        }
+      })
     })
   }
 
