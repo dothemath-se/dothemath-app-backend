@@ -14,9 +14,10 @@ interface MessageData {
 }
 
 interface SendMessageOptions {
-  socketId: string,
-  text: string,
-  sender: string
+  socketId: string;
+  text: string;
+  sender: string;
+  senderAvatar: string;
 }
 
 // Handles communication to/from frontend via websockets
@@ -74,13 +75,14 @@ class SocketController {
     }
   }
 
-  async sendMessage ({sender, text, socketId}: SendMessageOptions) {
+  async sendMessage ({sender, senderAvatar, text, socketId}: SendMessageOptions) {
     const socket = this.io.sockets.sockets[socketId];
 
     if (socket) {
       socket.emit('message', {
         text,
-        name: sender
+        name: sender,
+        avatar: senderAvatar
       });
     }
   }

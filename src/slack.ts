@@ -47,7 +47,8 @@ class SlackController {
         this.controller.handleMessageFromSlack({
           sender: userInfo.user.profile.display_name,
           text: message.text,
-          threadId: message.thread_ts
+          threadId: message.thread_ts,
+          senderAvatar: userInfo.user.profile.image_48
         });
       }
     });
@@ -85,7 +86,13 @@ interface ChatPostMessageResult extends WebAPICallResult {
 interface UserInfoResult extends WebAPICallResult {
   user: {
     profile: {
-      display_name: string
+      display_name: string,
+      image_24: string;
+      image_32: string;
+      image_48: string;
+      image_72: string;
+      image_192: string;
+      image_512: string;
     }
   }
 }
