@@ -9,11 +9,13 @@ interface Session {
   socketId: string;
   threadId?: string;
   studentName: string;
+  channelId: string;
 }
 
 interface EstablishSessionOptions {
   name: string;
   socketId: string;
+  channelId: string;
 }
 
 interface HandleMessageFromClientOptions {
@@ -46,7 +48,7 @@ class AppController {
     this.socket.attachToServer(server);
   }
 
-  establishSession ({name, socketId}: EstablishSessionOptions) {
+  establishSession ({name, socketId, channelId}: EstablishSessionOptions) {
     const activeSession = this.sessions.find(session => session.socketId === socketId);
     if (activeSession) {
       this.dropSession(activeSession.socketId);
@@ -54,7 +56,8 @@ class AppController {
     
     this.sessions.push({
       studentName: name,
-      socketId
+      socketId,
+      channelId: channelId
     });
 
     console.log(this.sessions);
@@ -65,7 +68,7 @@ class AppController {
     if(droppedSessions.length > 0 && droppedSessions[0].threadId) {
       const droppedSession = droppedSessions[0];
       this.slack.postMessage({
-        channel: 'C0111SXA24T',
+        channel: droppedSession.channelId,
         thread: droppedSession.threadId,
         text: `${droppedSession.studentName} har kopplat från och kommer inte se nya meddelanden. Tack för din hjälp! 😁`
       })
@@ -87,11 +90,11 @@ class AppController {
       throw 'No active session';
     }
 
-    const { studentName, threadId } = session;
+    const { studentName, threadId, channelId } = session;
 
     const response = await this.slack.postMessage({
       text: text,
-      channel: 'C0111SXA24T',
+      channel: channelId,
       username: studentName ? studentName : 'Web Client',
       thread: threadId
     });

@@ -6,6 +6,7 @@ import AppController from './app';
 
 interface EstablishSessionData {
   studentName: string;
+  channelId: string;
 }
 
 interface MessageData {
@@ -49,10 +50,11 @@ class SocketController {
         if (cb) cb();
       });
 
-      socket.on('establish_session', (data: EstablishSessionData, cb: any) => {
+      socket.on('establish_session', ({studentName, channelId}: EstablishSessionData, cb: any) => {
         this.controller.establishSession({
-          name: data.studentName,
-          socketId: socket.id
+          name: studentName,
+          socketId: socket.id,
+          channelId: channelId ? channelId : 'C0111SXA24T'
         }); //
         if(cb) cb();
       });
