@@ -65,7 +65,26 @@ class SlackController {
 
     return response;
   }
+
+  async deleteThread({threadId, channelId, threadMessageIds}: DeleteThreadOptions) {
+    const responses = await Promise
+    .all(threadMessageIds
+      .map(id => this.app.client.chat
+        .delete({
+          token: SLACK_BOT_TOKEN,
+          channel: channelId,
+          ts: id
+        })));
+    
+    return responses;
+  }
   
+}
+
+interface DeleteThreadOptions {
+  threadId: string;
+  channelId: string;
+  threadMessageIds: string[];
 }
 
 interface PostMessageOptions {

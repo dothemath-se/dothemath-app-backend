@@ -10,6 +10,8 @@ interface Session {
   threadId?: string;
   studentName: string;
   channelId: string;
+  receivedAnswer: boolean;
+  studentThreadMessageIds: string[];
 }
 
 interface EstablishSessionOptions {
@@ -58,7 +60,9 @@ class AppController {
     this.sessions.push({
       studentName: name,
       socketId,
-      channelId: channelId
+      channelId: channelId,
+      receivedAnswer: false,
+      studentThreadMessageIds: []
     });
 
     console.log(this.sessions);
@@ -68,11 +72,23 @@ class AppController {
     const droppedSessions = _.remove(this.sessions, session => session.socketId === socketId);
     if(droppedSessions.length > 0 && droppedSessions[0].threadId) {
       const droppedSession = droppedSessions[0];
-      this.slack.postMessage({
-        channel: droppedSession.channelId,
-        thread: droppedSession.threadId,
-        text: `${droppedSession.studentName} har kopplat från och kommer inte se nya meddelanden. Tack för din hjälp! 😁`
-      })
+
+      console.log('dropping session')
+      console.log(droppedSession);
+
+      if (droppedSession.receivedAnswer) {
+        this.slack.postMessage({
+          channel: droppedSession.channelId,
+          thread: droppedSession.threadId,
+          text: `${droppedSession.studentName} har kopplat från och kommer inte se nya meddelanden. Tack för din hjälp! 😁`
+        })
+      } else {
+        this.slack.deleteThread({
+          channelId: droppedSession.channelId,
+          threadId: droppedSession.threadId,
+          threadMessageIds: droppedSession.studentThreadMessageIds
+        })
+      }
     } 
   }
 
@@ -104,6 +120,8 @@ class AppController {
       session.threadId = response.ts;
     }
 
+    session.studentThreadMessageIds.push(response.ts);
+
     return response;
     /**
      * Called from SocketController
@@ -120,6 +138,8 @@ class AppController {
     const session = this.sessions.find(s => s.threadId === threadId);
 
     if (session) {
+      session.receivedAnswer = true;
+
       this.socket.sendMessage({
         socketId: session.socketId,
         text,
