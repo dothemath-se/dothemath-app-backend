@@ -48,6 +48,7 @@ Name | Type | Description
 --- | --- | ---
 text | string | 
 name | string | Meddelandets avsändare
+avatar | string | URL till avsändarens bild på Slack
 
 ```javascript
 socket.on('message', ({text, name}) => {
