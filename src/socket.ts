@@ -17,15 +17,14 @@ class SocketController {
 
   controller: AppController;
 
-  server: http.Server;
   io: SocketIO.Server;
 
   constructor (controller: AppController) {
     this.controller = controller;
+  }
 
-    this.server = http.createServer();
-    this.io = socketIO(this.server);
-
+  attachToServer(server: http.Server) {
+    this.io = socketIO(server);
     this.initEventListeners();
   }
 
@@ -36,18 +35,20 @@ class SocketController {
 
       this.sendChannelList(socket.id);
 
-      socket.on('send_message', ({ text }: MessageData) => {
-        this.controller.handleMessageFromClient({
+      socket.on('send_message', async ({ text }: MessageData, cb: any) => {
+        await this.controller.handleMessageFromClient({
           message: text,
           socketId: socket.id
         });
+        if (cb) cb();
       });
 
-      socket.on('establish_session', (data: EstablishSessionData) => {
+      socket.on('establish_session', (data: EstablishSessionData, cb: any) => {
         this.controller.establishSession({
           name: data.studentName,
           socketId: socket.id
-        });
+        }); //
+        if(cb) cb();
       });
 
       socket.on('disconnect', () => {
@@ -64,10 +65,6 @@ class SocketController {
       }, 5000);
   
     })
-  }
-
-  async start() {
-    this.server.listen(3001);
   }
 
   async sendChannelList (socketId: string) {

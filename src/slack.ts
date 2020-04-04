@@ -1,6 +1,7 @@
 import { App } from '@slack/bolt';
 import { WebAPICallResult } from '@slack/web-api';
 import AppController from './app';
+import { Server } from 'http';
 
 const SLACK_SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET;
 const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN;
@@ -22,10 +23,11 @@ class SlackController {
     this.initEventListeners();
   }
 
-  async start () {
+  async start (): Promise<Server> {
     const port = process.env.PORT || 3000;
-    await this.app.start(port);
+    const server = await this.app.start(port) as Server;
     console.log(`⚡️ Bolt app is running on :${port}`);
+    return server;
   }
 
   initEventListeners () {

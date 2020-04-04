@@ -1,7 +1,9 @@
-import SocketController from './socket';
-import SlackController from './slack';
 import prompts = require('prompts');
 import _ from 'lodash';
+import { Server } from 'http';
+
+import SocketController from './socket';
+import SlackController from './slack';
 
 interface Session {
   socketId: string;
@@ -23,6 +25,7 @@ class AppController {
 
   socket: SocketController;
   slack: SlackController;
+  server: Server;
 
   sessions: Session[] = [];
 
@@ -32,11 +35,17 @@ class AppController {
   }
 
   async start () {
-    await this.socket.start();
-    await this.slack.start();
+    const server = await this.slack.start();
+    this.server = server;
+    this.socket.attachToServer(server);
   }
 
   establishSession ({name, socketId}: EstablishSessionOptions) {
+    const activeSession = this.sessions.find(session => session.socketId === socketId);
+    if (activeSession) {
+      this.dropSession(activeSession.socketId);
+    }
+    
     this.sessions.push({
       studentName: name,
       socketId
@@ -60,11 +69,24 @@ class AppController {
     
     const session = this.sessions.find(s => s.socketId === socketId);
 
-    return await this.slack.postMessage({
+    if (!session) {
+      throw 'No active session';
+    }
+
+    const { studentName, threadId } = session;
+
+    const response = await this.slack.postMessage({
       text: message,
       channel: 'C0111SXA24T',
-      username: session ? session.studentName : 'Web Client',
+      username: studentName ? studentName : 'Web Client',
+      thread: threadId
     });
+
+    if (!threadId) {
+      session.threadId = response.ts;
+    }
+
+    return response;
     /**
      * Called from SocketController
      * Send msg to slack through slackcontroller.postMessage(), to channel or thread depending on if already active session (check if threadId is set)
