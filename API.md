@@ -19,6 +19,7 @@ Socket.io användning:
 Name | Type | Required | Description
 --- | --- | --- | ---
 studentName | string | * |
+channelId | string | * |
 
 ```javascript
 socket.emit('establish_session', { studentName: 'Jonathan' });
