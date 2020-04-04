@@ -30,6 +30,7 @@ interface HandleMessageFromSlackOptions {
   sender: string;
   threadId: string;
   senderAvatar: string;
+  image?: string;
 }
 
 class AppController {
@@ -130,7 +131,7 @@ class AppController {
      */
   }
 
-  async handleMessageFromSlack ({ text, threadId, sender, senderAvatar}: HandleMessageFromSlackOptions) {
+  async handleMessageFromSlack ({ text, threadId, sender, senderAvatar, image}: HandleMessageFromSlackOptions) {
     /**
      * Called from SlackController
      * Find session via threadId. Send message to client via socketcontroller.sendMessage()
@@ -144,7 +145,8 @@ class AppController {
         socketId: session.socketId,
         text,
         sender,
-        senderAvatar
+        senderAvatar,
+        image
       });
     }
   }

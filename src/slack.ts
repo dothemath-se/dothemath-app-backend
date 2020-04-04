@@ -6,7 +6,7 @@ import _ from 'lodash';
 
 const SLACK_SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET;
 const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN;
-const SLACK_USER_TOKEN = '';
+const SLACK_USER_TOKEN = process.env.SLACK_USER_TOKEN;
 
 class SlackController {
   
@@ -36,19 +36,29 @@ class SlackController {
     this.app.message(async ({message, context}) => {
       
       if (message.thread_ts) {
+
         const userInfo = await this.app.client.users.info({
           user: message.user,
           token: context.botToken
         }) as UserInfoResult;
-  
-        console.log(userInfo);
+
+        let imageURL: string;
+
+        if (message.files) {
+          const imageResponse = await this.app.client.files.sharedPublicURL({
+            file: message.files[0].id,
+            token: SLACK_USER_TOKEN
+          }) as FilesSharedPublicURLResult;
+          imageURL = imageResponse.file.permalink_public
+        }
 
         
         this.controller.handleMessageFromSlack({
           sender: userInfo.user.profile.display_name,
           text: message.text,
           threadId: message.thread_ts,
-          senderAvatar: userInfo.user.profile.image_48
+          senderAvatar: userInfo.user.profile.image_48,
+          image: imageURL
         });
       }
     });
@@ -113,6 +123,12 @@ interface UserInfoResult extends WebAPICallResult {
       image_192: string;
       image_512: string;
     }
+  }
+}
+
+interface FilesSharedPublicURLResult extends WebAPICallResult {
+  file: {
+    permalink_public: string;
   }
 }
 

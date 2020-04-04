@@ -18,6 +18,7 @@ interface SendMessageOptions {
   text: string;
   sender: string;
   senderAvatar: string;
+  image?: string;
 }
 
 // Handles communication to/from frontend via websockets
@@ -82,14 +83,15 @@ class SocketController {
     }
   }
 
-  async sendMessage ({sender, senderAvatar, text, socketId}: SendMessageOptions) {
+  async sendMessage ({sender, senderAvatar, text, socketId, image}: SendMessageOptions) {
     const socket = this.io.sockets.sockets[socketId];
 
     if (socket) {
       socket.emit('message', {
         text,
         name: sender,
-        avatar: senderAvatar
+        avatar: senderAvatar,
+        image
       });
     }
   }
