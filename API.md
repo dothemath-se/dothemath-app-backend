@@ -11,3 +11,42 @@ Socket.io användning:
   });
 </script>
 ```
+
+## Metoder
+
+### establish_session 
+
+Name | Type | Required | Description
+--- | --- | --- | ---
+studentName | string | * |
+
+```javascript
+socket.emit('establish_session', { studentName: 'Jonathan' });
+```
+___
+
+### send_message 
+
+Name | Type | Required | Description
+--- | --- | --- | ---
+text | string | *
+
+```javascript
+socket.emit('send_message', { text: 'Message from the web!' });
+```
+___
+
+## Events
+
+### message
+
+Name | Type | Description
+--- | --- | ---
+text | string | 
+name | string | Meddelandets avsändare
+
+```javascript
+socket.on('message', ({text, name}) => {
+  console.log(`${name}: ${text}`);
+});
+```

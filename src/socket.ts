@@ -1,9 +1,15 @@
 import http from 'http';
 import socketIO from 'socket.io';
 
-
-
 import AppController from './app';
+
+interface EstablishSessionData {
+  studentName: string;
+}
+
+interface MessageData {
+  text: string;
+}
 
 // Handles communication to/from frontend via websockets
 class SocketController {
@@ -29,8 +35,22 @@ class SocketController {
       console.log('socket connected');
       console.log(socket.id);
 
-      socket.on('send_message', message => {
-        this.controller.handleMessageFromClient(message);
+      socket.on('send_message', ({ text }: MessageData) => {
+        this.controller.handleMessageFromClient({
+          message: text,
+          socketId: socket.id
+        });
+      });
+
+      socket.on('establish_session', (data: EstablishSessionData) => {
+        this.controller.establishSession({
+          name: data.studentName,
+          socketId: socket.id
+        });
+      });
+
+      socket.on('disconnect', () => {
+        this.controller.dropSession(socket.id);
       })
     })
   }

@@ -1,11 +1,22 @@
 import SocketController from './socket';
 import SlackController from './slack';
 import prompts = require('prompts');
+import _ from 'lodash';
 
 interface Session {
   socketId: string;
-  threadId: string;
+  threadId?: string;
   studentName: string;
+}
+
+interface EstablishSessionOptions {
+  name: string;
+  socketId: string;
+}
+
+interface HandleMessageFromClientOptions {
+  message: string;
+  socketId: string;
 }
 
 class AppController {
@@ -25,11 +36,27 @@ class AppController {
     await this.slack.start();
   }
 
-  async handleMessageFromClient (message: string) {
+  establishSession ({name, socketId}: EstablishSessionOptions) {
+    this.sessions.push({
+      studentName: name,
+      socketId
+    });
+
+    console.log(this.sessions);
+  }
+
+  dropSession (socketId: string) {
+    _.remove(this.sessions, session => session.socketId === socketId);
+  }
+
+  async handleMessageFromClient ({ message, socketId }: HandleMessageFromClientOptions) {
+    
+    const session = this.sessions.find(s => s.socketId === socketId);
+
     return await this.slack.postMessage({
       text: message,
       channel: 'C0111SXA24T',
-      username: 'Web Client',
+      username: session ? session.studentName : 'Web Client',
     });
     /**
      * Called from SocketController
@@ -70,7 +97,6 @@ class AppController {
       username: 'Student'
     });
   }
-
 }
 
 export default AppController;
