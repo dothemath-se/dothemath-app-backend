@@ -58,7 +58,7 @@ class SocketController {
       const tutor = faker.name.firstName();
       setInterval(() => {
         socket.emit('message', {
-          text: faker.lorem.sentences(3);
+          text: faker.lorem.sentences(3),
           name: tutor
         });
       }, 5000);
