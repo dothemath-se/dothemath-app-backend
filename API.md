@@ -53,7 +53,7 @@ socket.on('message', ({text, name}) => {
 
 ### channel_list
 
-Skickar en array med object av formen:
+Eventet sker efter att socketen connectat. Skickar en array med object av formen:
 Name | Type | Description
 --- | --- | ---
 name | string | 
