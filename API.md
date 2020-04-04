@@ -22,7 +22,10 @@ studentName | string | * |
 channelId | string | * |
 
 ```javascript
-socket.emit('establish_session', { studentName: 'Jonathan' });
+socket.emit('establish_session', {
+  studentName: 'Jonathan',
+  channelId: 'C011ENW7TJQ'
+});
 ```
 ___
 
