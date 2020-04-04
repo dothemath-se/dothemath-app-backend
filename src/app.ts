@@ -25,7 +25,12 @@ class AppController {
     await this.slack.start();
   }
 
-  async handleMessageFromClient () {
+  async handleMessageFromClient (message: string) {
+    return await this.slack.postMessage({
+      text: message,
+      channel: 'C0111SXA24T',
+      username: 'Web Client',
+    });
     /**
      * Called from SocketController
      * Send msg to slack through slackcontroller.postMessage(), to channel or thread depending on if already active session (check if threadId is set)
