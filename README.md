@@ -1,4 +1,4 @@
-# dothemath.app backend ![](https://github.com/dothemath-se/dothemath-app-backend/workflows/Deploy%20to%20Azure/badge.svg)
+# dothemath.app backend ![ ](https://github.com/dothemath-se/dothemath-app-backend/workflows/Deploy%20to%20Azure/badge.svg)
 
 ## Installation
 
