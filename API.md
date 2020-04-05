@@ -1,10 +1,12 @@
-# API Dokumentation
+# API documentation
 
-Socket.io användning:
+Enabling Socket.IO in frontend:
+
 ```javascript
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+
 <script>
-  const socket = io('https://ec3c1d00.ngrok.io'); //min lokala dator, ska senare vara https://api.dothemath.app
+  const socket = io('https://api.dothemath.app');  // URL to backend
   
   socket.on('connect', () => {
     socket.emit('send_message', { text: 'Message from the web!' });
@@ -12,28 +14,29 @@ Socket.io användning:
 </script>
 ```
 
-## Metoder
+## Methods
 
-### establish_session 
+### establish_session
 
 Name | Type | Required | Description
 --- | --- | --- | ---
-studentName | string | * |
-channelId | string | * |
+studentName | string | * | Nickname of student
+channelId | string | * | Channel ID
 
 ```javascript
 socket.emit('establish_session', {
-  studentName: 'Jonathan',
+  studentName: 'MyNickName',
   channelId: 'C011ENW7TJQ'
 });
 ```
+
 ___
 
-### send_message 
+### send_message
 
 Name | Type | Required | Description
 --- | --- | --- | ---
-text | string | *
+text | string | * | Message text
 
 ```javascript
 socket.emit('send_message', { text: 'Message from the web!' });
@@ -54,10 +57,10 @@ ___
 
 Name | Type | Description
 --- | --- | ---
-text | string | 
-name | string | Meddelandets avsändare
-avatar | string | URL till avsändarens bild på Slack
-image | string | URL till eventuell bifogad bild
+text | string | Message text
+name | string | Message sender
+avatar | string | Message sender profile image URL
+image | string | Message attached image URL (if there is one)
 
 ```javascript
 socket.on('message', ({text, name}) => {
@@ -67,11 +70,12 @@ socket.on('message', ({text, name}) => {
 
 ### channel_list
 
-Eventet sker efter att socketen connectat. Skickar en array med object av formen:
+This event happens after socket connents. Sends an array of objects.
+
 Name | Type | Description
 --- | --- | ---
-name | string | 
-id | string | 
+name | string | Channel name
+id | string | Channel ID
 
 ```javascript
 socket.on('channel_list', channels => {
