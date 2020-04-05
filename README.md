@@ -1,4 +1,4 @@
-# dothemath-app-backend
+# dothemath.app backend ![](https://github.com/dothemath-se/dothemath-app-backend/workflows/Deploy%20to%20Azure/badge.svg)
 
 ## Installation
 
@@ -17,3 +17,7 @@ Följande miljövariabler behöver sättas
 Kör sedan
 
 `npm run watch-debug`
+
+## API documentation
+
+[API documentation](API.md)
