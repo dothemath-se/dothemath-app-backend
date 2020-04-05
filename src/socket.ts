@@ -1,6 +1,5 @@
 import http from 'http';
 import socketIO from 'socket.io';
-import faker from 'faker';
 
 import AppController from './app';
 

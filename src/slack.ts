@@ -3,6 +3,7 @@ import { WebAPICallResult } from '@slack/web-api';
 import AppController from './app';
 import { Server } from 'http';
 import _ from 'lodash';
+import { parseEmojis } from './utils';
 
 const SLACK_SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET;
 const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN;
@@ -55,7 +56,7 @@ class SlackController {
         
         this.controller.handleMessageFromSlack({
           sender: userInfo.user.profile.display_name,
-          text: message.text,
+          text: parseEmojis(message.text),
           threadId: message.thread_ts,
           senderAvatar: userInfo.user.profile.image_48,
           image: imageURL
