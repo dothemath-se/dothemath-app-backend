@@ -1,9 +1,9 @@
-import prompts = require('prompts');
 import _ from 'lodash';
 import { Server } from 'http';
 
 import SocketController from './socket';
 import SlackController from './slack';
+import channels from './channels';
 
 interface Session {
   socketId: string;
@@ -94,10 +94,7 @@ class AppController {
   }
 
   getChannels() {
-    return [
-      { name: 'bot-test', id: 'C0111SXA24T'},
-      { name: 'bot-test-2', id: 'C011ENW7TJQ'}
-    ]
+    return channels;
   }
 
   async handleMessageFromClient ({ text, socketId }: HandleMessageFromClientOptions) {
@@ -149,32 +146,6 @@ class AppController {
         image
       });
     }
-  }
-
-  // development method to send questions through commandline 
-  async prompt () {
-    const { question, threadMessage } = await prompts([{
-      type: 'text',
-      name: 'question',
-      message: 'Ask question on Slack:'
-    }, {
-      type: 'text',
-      name: 'threadMessage',
-      message: 'Add additional info in thread:'
-    }]);
-
-    const response = await this.slack.postMessage({
-      channel: 'C0111SXA24T',
-      text: question,
-      username: 'Student'
-    });
-
-    await this.slack.postMessage({
-      channel: 'C0111SXA24T',
-      text: threadMessage,
-      thread: response.ts,
-      username: 'Student'
-    });
   }
 }
 
