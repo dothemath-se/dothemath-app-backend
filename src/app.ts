@@ -65,8 +65,6 @@ class AppController {
       receivedAnswer: false,
       studentThreadMessageIds: []
     });
-
-    console.log(this.sessions);
   }
 
   dropSession (socketId: string) {
@@ -74,14 +72,11 @@ class AppController {
     if(droppedSessions.length > 0 && droppedSessions[0].threadId) {
       const droppedSession = droppedSessions[0];
 
-      console.log('dropping session')
-      console.log(droppedSession);
-
       if (droppedSession.receivedAnswer) {
         this.slack.postMessage({
           channel: droppedSession.channelId,
           thread: droppedSession.threadId,
-          text: `${droppedSession.studentName} har kopplat från och kommer inte se nya meddelanden. Tack för din hjälp! 😁`
+          text: `${droppedSession.studentName} has disconnected and will no longer receive your messages. Thank you for your help!`
         })
       } else {
         this.slack.deleteThread({
@@ -97,6 +92,10 @@ class AppController {
     return channels;
   }
 
+  /**
+   * Called from SocketController
+   * Send msg to slack through slackcontroller.postMessage(), to channel or thread depending on if already active session (check if threadId is set)
+   */
   async handleMessageFromClient ({ text, socketId }: HandleMessageFromClientOptions) {
     
     const session = this.sessions.find(s => s.socketId === socketId);
@@ -121,18 +120,13 @@ class AppController {
     session.studentThreadMessageIds.push(response.ts);
 
     return response;
-    /**
-     * Called from SocketController
-     * Send msg to slack through slackcontroller.postMessage(), to channel or thread depending on if already active session (check if threadId is set)
-     * Send msg to client through socketcontroller confirming question's been posted
-     */
   }
 
+  /**
+   * Called from SlackController
+   * Find session via threadId. Send message to client via socketcontroller.sendMessage()
+   */
   async handleMessageFromSlack ({ text, threadId, sender, senderAvatar, image}: HandleMessageFromSlackOptions) {
-    /**
-     * Called from SlackController
-     * Find session via threadId. Send message to client via socketcontroller.sendMessage()
-     */
     const session = this.sessions.find(s => s.threadId === threadId);
 
     if (session) {

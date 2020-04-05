@@ -37,7 +37,6 @@ class SocketController {
   }
 
   initEventListeners() {
-    // listen to messages sent from frontend, call appropriate method on appcontroller 
 
     this.io.on('connection', socket => {
 

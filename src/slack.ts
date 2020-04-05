@@ -80,7 +80,7 @@ class SlackController {
 
   async deleteThread({threadId, channelId, threadMessageIds}: DeleteThreadOptions) {
     const responses = await Promise
-    .all(threadMessageIds
+    .all(_.uniq([...threadMessageIds, threadId])
       .map(id => this.app.client.chat
         .delete({
           token: SLACK_BOT_TOKEN,
