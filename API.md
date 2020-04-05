@@ -43,7 +43,7 @@ socket.emit('send_message', { text: 'Message from the web!' });
 ```
 
 ### get_channels 
-Takes a callback function. See [channel_list](#channel_list) for formet of return value.
+Takes a callback function. See [channel_list](#channel_list) for format of return value.
 ```javascript
 socket.emit('get_channels', channels => {
   console.log(channels)
