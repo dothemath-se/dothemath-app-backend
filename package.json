@@ -1,8 +1,8 @@
 {
-  "name": "dothemath-slackbot",
+  "name": "dothemath-app-backend",
+  "author": "dothemath.se",
+  "license": "MIT",
   "private": true,
-  "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
@@ -15,8 +15,6 @@
     "serve-debug": "nodemon -w ./dist --inspect dist/index.js",
     "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\""
   },
-  "author": "Jonathan Sandgren",
-  "license": "MIT",
   "devDependencies": {
     "@types/emoji-js": "^3.4.0",
     "@types/lodash": "^4.14.149",
