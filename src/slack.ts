@@ -9,6 +9,8 @@ const SLACK_SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET;
 const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN;
 const SLACK_USER_TOKEN = process.env.SLACK_USER_TOKEN;
 
+const PORT = process.env.PORT || 3000;
+
 class SlackController {
   
   app: App;
@@ -26,9 +28,8 @@ class SlackController {
   }
 
   async start (): Promise<Server> {
-    const port = process.env.PORT || 3000;
-    const server = await this.app.start(port) as Server;
-    console.log(`⚡️ Bolt app is running on :${port}`);
+    const server = await this.app.start(PORT) as Server;
+    console.log(`⚡️ Bolt app is running on :${PORT}`);
     return server;
   }
 
