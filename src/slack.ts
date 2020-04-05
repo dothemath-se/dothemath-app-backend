@@ -56,7 +56,7 @@ class SlackController {
 
         
         this.controller.handleMessageFromSlack({
-          sender: userInfo.user.profile.display_name,
+          sender: userInfo.user.real_name,
           text: parseEmojis(message.text),
           threadId: message.thread_ts,
           senderAvatar: userInfo.user.profile.image_48,
@@ -116,6 +116,7 @@ interface ChatPostMessageResult extends WebAPICallResult {
 
 interface UserInfoResult extends WebAPICallResult {
   user: {
+    real_name: string;
     profile: {
       display_name: string,
       image_24: string;
