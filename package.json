@@ -16,6 +16,7 @@
     "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\""
   },
   "devDependencies": {
+    "@types/cheerio": "^0.22.17",
     "@types/emoji-js": "^3.4.0",
     "@types/lodash": "^4.14.149",
     "@types/prompts": "^2.0.5",
@@ -26,6 +27,8 @@
   },
   "dependencies": {
     "@slack/bolt": "^2.0.0",
+    "axios": "^0.19.2",
+    "cheerio": "^1.0.0-rc.3",
     "emoji-js": "^3.5.0",
     "lodash": "^4.17.15",
     "prompts": "^2.3.2",

@@ -3,7 +3,7 @@ import { WebAPICallResult } from '@slack/web-api';
 import AppController from './app';
 import { Server } from 'http';
 import _ from 'lodash';
-import { parseEmojis } from './utils';
+import { parseEmojis, getImageURLFromSlackPage } from './utils';
 
 const SLACK_SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET;
 const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN;
@@ -51,7 +51,7 @@ class SlackController {
             file: message.files[0].id,
             token: SLACK_USER_TOKEN
           }) as FilesSharedPublicURLResult;
-          imageURL = imageResponse.file.permalink_public
+          imageURL = await getImageURLFromSlackPage(imageResponse.file.permalink_public)
         }
 
         
