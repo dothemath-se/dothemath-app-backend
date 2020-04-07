@@ -23,6 +23,7 @@ interface EstablishSessionOptions {
 interface HandleMessageFromClientOptions {
   text: string;
   socketId: string;
+  image?: Buffer;
 }
 
 interface HandleMessageFromSlackOptions {
@@ -96,7 +97,7 @@ class AppController {
    * Called from SocketController
    * Send msg to slack through slackcontroller.postMessage(), to channel or thread depending on if already active session (check if threadId is set)
    */
-  async handleMessageFromClient ({ text, socketId }: HandleMessageFromClientOptions) {
+  async handleMessageFromClient ({ text, image, socketId }: HandleMessageFromClientOptions) {
     
     const session = this.sessions.find(s => s.socketId === socketId);
 
@@ -106,20 +107,32 @@ class AppController {
 
     const { studentName, threadId, channelId } = session;
 
-    const response = await this.slack.postMessage({
-      text: text,
-      channel: channelId,
-      username: studentName ? studentName : 'Web Client',
-      thread: threadId
-    });
+    let ts;
 
-    if (!threadId) {
-      session.threadId = response.ts;
+    if (image) {
+      ts = await this.slack.postImageMessage({
+        text,
+        channel: channelId,
+        username: studentName ? studentName : 'Web Client',
+        thread: threadId,
+        image
+      });
+    } else {
+      ts = await this.slack.postMessage({
+        text: text,
+        channel: channelId,
+        username: studentName ? studentName : 'Web Client',
+        thread: threadId
+      });
     }
 
-    session.studentThreadMessageIds.push(response.ts);
+    if (!threadId) {
+      session.threadId = ts;
+    }
 
-    return response;
+    session.studentThreadMessageIds.push(ts);
+
+    return ts;
   }
 
   /**
