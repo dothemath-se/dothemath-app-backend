@@ -2,11 +2,17 @@
 
 ## Table of Contents
 
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Running locally](#running-locally)
-- [API documentation](#api-documentation)
+- [dothemath.app backend !](#dothemathapp-backend)
+  - [Table of Contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+  - [Running locally](#running-locally)
+  - [Building for production](#building-for-production)
+  - [API documentation](#api-documentation)
+  - [Slack app permissions](#slack-app-permissions)
+    - [Bot Token Scopes](#bot-token-scopes)
+    - [User Token Scopes](#user-token-scopes)
 
 ## Prerequisites
 
@@ -43,3 +49,18 @@ Compile TypeScript files into dist/ folder
 ## API documentation
 
 [API documentation](API.md)
+
+## Slack app permissions
+
+These permissions need to be enabled on your Slack app:
+
+### Bot Token Scopes
+
+- channels:history
+- chat:write
+- chat:write.customize
+- users:read
+
+### User Token Scopes
+
+- files:write
