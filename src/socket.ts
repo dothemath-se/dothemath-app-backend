@@ -10,6 +10,7 @@ interface EstablishSessionData {
 
 interface MessageData {
   text: string;
+  image?: Buffer;
 }
 
 interface SendMessageOptions {
@@ -42,10 +43,12 @@ class SocketController {
 
       this.sendChannelList(socket.id);
 
-      socket.on('send_message', async ({ text }: MessageData, cb: any) => {
+      socket.on('send_message', async ({ text, image }: MessageData, cb: any) => {
+
         await this.controller.handleMessageFromClient({
           text,
-          socketId: socket.id
+          socketId: socket.id,
+          image
         });
         if (cb) cb();
       });
@@ -55,7 +58,7 @@ class SocketController {
           name: studentName,
           socketId: socket.id,
           channelId: channelId ? channelId : 'C0111SXA24T'
-        }); //
+        }); 
         if(cb) cb();
       });
 

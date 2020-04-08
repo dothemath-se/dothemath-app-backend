@@ -37,6 +37,7 @@ ___
 Name | Type | Required | Description
 --- | --- | --- | ---
 text | string | * | Message text
+image | ArrayBuffer | |
 
 ```javascript
 socket.emit('send_message', { text: 'Message from the web!' });

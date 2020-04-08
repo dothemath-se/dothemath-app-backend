@@ -66,7 +66,7 @@ class SlackController {
     });
   }
 
-  async postMessage ({text, channel, username, thread}: PostMessageOptions) {
+  async postMessage ({text, channel, username, thread}: PostMessageOptions): Promise<string> {
     const response = await this.app.client.chat.postMessage({
       token: SLACK_BOT_TOKEN,
       text,
@@ -75,7 +75,23 @@ class SlackController {
       thread_ts: thread
     }) as ChatPostMessageResult;
 
-    return response;
+    return response.ts;
+  }
+
+  async postImageMessage ({text, image, channel, username, thread}: PostImageMessageOptions): Promise<string> {
+    const response = await this.app.client.files.upload({
+      token: SLACK_BOT_TOKEN,
+      channels: channel,
+      thread_ts: thread,
+      initial_comment: `*${username}*: ${text}`,
+      file: image
+    }) as FilesUploadResult;
+
+    console.log(response.file.shares.public);
+
+    response.ts = response.file.shares.public[channel][0].ts;
+
+    return response.file.shares.public[channel][0].ts;;
   }
 
   async deleteThread({threadId, channelId, threadMessageIds}: DeleteThreadOptions) {
@@ -106,11 +122,27 @@ interface PostMessageOptions {
   thread?: string;
 }
 
+interface PostImageMessageOptions extends PostMessageOptions {
+  image: Buffer;
+}
+
 interface ChatPostMessageResult extends WebAPICallResult {
   channel: string;
   ts: string;
   message: {
     text: string;
+  }
+}
+
+interface FilesUploadResult extends WebAPICallResult {
+  file: {
+    shares: {
+      public: {
+        [key: string]: {
+          ts: string;
+        }[]
+      }
+    }
   }
 }
 
