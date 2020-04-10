@@ -94,8 +94,6 @@ class SlackController {
       file: image
     }) as FilesUploadResult;
 
-    console.log(response.file.shares.public);
-
     response.ts = response.file.shares.public[channel][0].ts;
 
     return response.file.shares.public[channel][0].ts;;
@@ -122,7 +120,6 @@ class SlackController {
       ts: threadId
     }) as ConversationsRepliesResult;
 
-    console.log(response.messages);
     const { messages } = response;
 
     let studentUsername: string;
@@ -131,7 +128,7 @@ class SlackController {
     const studentImageMessages = messages.filter(m => m.upload && m.user === this.botUserId);
 
     
-    if (studentTextMessages.length > 10) {
+    if (studentTextMessages.length > 0) {
       studentUsername = studentTextMessages[0].username;
     } else if (studentImageMessages.length > 0) {
       const messageSplit = studentImageMessages[0].text.split('*');

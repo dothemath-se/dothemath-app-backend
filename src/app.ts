@@ -82,7 +82,7 @@ class AppController {
       });
 
       return {
-        channelId,
+        channel: channels.find(c => c.id === channelId),
         threadId,
         name: threadData.username,
         messages: threadData.messages
@@ -92,6 +92,8 @@ class AppController {
 
   dropSession (socketId: string) {
     const droppedSessions = _.remove(this.sessions, session => session.socketId === socketId);
+    
+    /*
     if(droppedSessions.length > 0 && droppedSessions[0].threadId) {
       const droppedSession = droppedSessions[0];
 
@@ -101,7 +103,8 @@ class AppController {
         text: `${droppedSession.studentName} has gone offline.`
       })
   
-    } 
+    }
+    */
   }
 
   getChannels() {
@@ -145,7 +148,10 @@ class AppController {
       session.threadId = ts;
     }
 
-    return ts;
+    return {
+      ts,
+      threadId: session.threadId
+    };
   }
 
   /**
@@ -153,6 +159,7 @@ class AppController {
    * Find session via threadId. Send message to client via socketcontroller.sendMessage()
    */
   async handleMessageFromSlack ({ text, threadId, sender, senderAvatar, image}: HandleMessageFromSlackOptions) {
+
     const session = this.sessions.find(s => s.threadId === threadId);
 
     if (session) {

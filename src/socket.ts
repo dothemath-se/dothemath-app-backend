@@ -50,12 +50,15 @@ class SocketController {
 
       socket.on('send_message', async ({ text, image }: MessageData, cb: any) => {
 
-        await this.controller.handleMessageFromClient({
+        const response = await this.controller.handleMessageFromClient({
           text,
           socketId: socket.id,
           image
         });
-        if (cb) cb();
+        if (cb) cb({
+          ts: response.ts,
+          threadId: response.threadId
+        });
       });
 
       socket.on('establish_session', ({studentName, channelId}: EstablishSessionData, cb: any) => {
@@ -74,9 +77,12 @@ class SocketController {
             channelId,
             socketId: socket.id,
           }); 
+
+          console.log(data);
+
           if(cb) cb({
             threadId,
-            channelId,
+            channel: data.channel,
             name: data.name,
             messages: data.messages
           });
