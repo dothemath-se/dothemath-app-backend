@@ -10,5 +10,5 @@ export default [
   { name: '9th Grade Math', id: 'C011DBG1L6S' },
   { name: 'Physics', id: 'C011A2CTC0Z' },
   { name: 'Chemistry', id: 'C011FBV856Y' },
-  { name: 'Bot Test', id: 'C0111SXA24T' },
+  //{ name: 'Bot Test', id: 'C0111SXA24T' },
 ]
