@@ -6,18 +6,22 @@ import SlackController from './slack';
 import channels from './channels';
 
 interface Session {
-  socketId: string;
+  socketId?: string;
   threadId?: string;
   studentName: string;
   channelId: string;
-  receivedAnswer: boolean;
-  studentThreadMessageIds: string[];
 }
 
 interface EstablishSessionOptions {
   name: string;
   socketId: string;
   channelId: string;
+}
+
+interface ReEstablishSessionOptions {
+  threadId: string;
+  channelId: string;
+  socketId: string;
 }
 
 interface HandleMessageFromClientOptions {
@@ -63,9 +67,27 @@ class AppController {
       studentName: name,
       socketId,
       channelId: channelId,
-      receivedAnswer: false,
-      studentThreadMessageIds: []
     });
+  }
+
+  async reEstablisSession ({socketId, channelId, threadId}: ReEstablishSessionOptions) {
+    _.remove(this.sessions, session => session.channelId === channelId && session.threadId === threadId);
+    const threadData = await this.slack.getThread({ channelId, threadId });
+    if (threadData) {
+      this.sessions.push({
+        studentName: threadData.username,
+        channelId,
+        threadId,
+        socketId
+      });
+
+      return {
+        channelId,
+        threadId,
+        name: threadData.username,
+        messages: threadData.messages
+      };
+    }
   }
 
   dropSession (socketId: string) {
@@ -73,19 +95,12 @@ class AppController {
     if(droppedSessions.length > 0 && droppedSessions[0].threadId) {
       const droppedSession = droppedSessions[0];
 
-      if (droppedSession.receivedAnswer) {
-        this.slack.postMessage({
-          channel: droppedSession.channelId,
-          thread: droppedSession.threadId,
-          text: `${droppedSession.studentName} has disconnected and will no longer receive your messages. Thank you for your help!`
-        })
-      } else {
-        this.slack.deleteThread({
-          channelId: droppedSession.channelId,
-          threadId: droppedSession.threadId,
-          threadMessageIds: droppedSession.studentThreadMessageIds
-        })
-      }
+      this.slack.postMessage({
+        channel: droppedSession.channelId,
+        thread: droppedSession.threadId,
+        text: `${droppedSession.studentName} has gone offline.`
+      })
+  
     } 
   }
 
@@ -130,8 +145,6 @@ class AppController {
       session.threadId = ts;
     }
 
-    session.studentThreadMessageIds.push(ts);
-
     return ts;
   }
 
@@ -143,8 +156,6 @@ class AppController {
     const session = this.sessions.find(s => s.threadId === threadId);
 
     if (session) {
-      session.receivedAnswer = true;
-
       this.socket.sendMessage({
         socketId: session.socketId,
         text,

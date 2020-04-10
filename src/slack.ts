@@ -13,8 +13,11 @@ const PORT = process.env.PORT || 3000;
 
 class SlackController {
   
-  app: App;
+  private app: App;
   controller: AppController;
+
+  private botId: string;
+  private botUserId: string;
   
   constructor (controller: AppController) {
     this.controller = controller;
@@ -29,6 +32,10 @@ class SlackController {
 
   async start (): Promise<Server> {
     const server = await this.app.start(PORT) as Server;
+    const { bot_id, user_id } = await this.app.client.auth.test({ token: SLACK_BOT_TOKEN }) as AuthTestResult;
+    this.botId = bot_id;
+    this.botUserId = user_id;
+
     console.log(`⚡️ Bolt app is running on :${PORT}`);
     return server;
   }
@@ -106,6 +113,84 @@ class SlackController {
     
     return responses;
   }
+
+  
+  async getThread({threadId, channelId}: GetThreadOptions): Promise<GetThreadResult> {
+    const response = await this.app.client.conversations.replies({
+      token: SLACK_BOT_TOKEN,
+      channel: channelId,
+      ts: threadId
+    }) as ConversationsRepliesResult;
+
+    console.log(response.messages);
+    const { messages } = response;
+
+    let studentUsername: string;
+
+    const studentTextMessages = messages.filter(m => m.subtype && m.subtype === 'bot_message' && m.bot_id === this.botId);
+    const studentImageMessages = messages.filter(m => m.upload && m.user === this.botUserId);
+
+    
+    if (studentTextMessages.length > 10) {
+      studentUsername = studentTextMessages[0].username;
+    } else if (studentImageMessages.length > 0) {
+      const messageSplit = studentImageMessages[0].text.split('*');
+      studentUsername = messageSplit[1];
+    }
+
+    const users = await Promise.all(
+      _.uniq(messages
+      .filter(m => m.user && m.user !== this.botUserId)
+      .map(m => m.user)
+        ).map(userId => {
+          return this.app.client.users.info({
+            token: SLACK_BOT_TOKEN,
+            user: userId
+          }) as Promise<UserInfoResult>})
+    );
+
+    
+    const usernames = users.reduce((acc, cur) => {
+      acc[cur.user.id] = cur.user.real_name;
+      return acc;
+    }, {} as {[key: string]: string})
+    
+
+    const returnMessages = await Promise.all(messages.map(async message => {
+      const isUser = (!!message.subtype && message.subtype === 'bot_message' && message.bot_id === this.botId)
+                     || (!!message.upload && message.user === this.botUserId);
+      const name = isUser ? studentUsername : usernames[message.user];
+      let text = '';
+      let image = '';
+
+      if (isUser && message.upload && message.text) {
+        const messageSplit = message.text.split(`${studentUsername}*: `);
+        if (messageSplit.length > 1) {
+          text = messageSplit[1];
+        }
+      } else if (message.text) {
+        text = message.text;
+      }
+
+      if (message.upload && message.files && message.files[0]) {
+        image = await getImageURLFromSlackPage(message.files[0].permalink_public);
+      }
+
+      return {
+        isUser,
+        text,
+        name,
+        image
+      };
+    }));
+
+    return {
+      threadId,
+      channelId,
+      username: studentUsername,
+      messages: returnMessages
+    }
+  }
   
 }
 
@@ -120,6 +205,23 @@ interface PostMessageOptions {
   channel: string;
   username?: string;
   thread?: string;
+}
+
+interface GetThreadOptions {
+  threadId: string;
+  channelId: string;
+}
+
+interface GetThreadResult {
+  threadId: string;
+  channelId: string;
+  username: string;
+  messages: {
+    name: string;
+    text?: string;
+    image?: string;
+    isUser: boolean;
+  }[];
 }
 
 interface PostImageMessageOptions extends PostMessageOptions {
@@ -148,6 +250,7 @@ interface FilesUploadResult extends WebAPICallResult {
 
 interface UserInfoResult extends WebAPICallResult {
   user: {
+    id: string;
     real_name: string;
     profile: {
       display_name: string,
@@ -161,10 +264,37 @@ interface UserInfoResult extends WebAPICallResult {
   }
 }
 
+interface SlackFile {
+  name: string;
+  user: string;
+  is_public: boolean;
+  permalink_public: string;
+}
+
 interface FilesSharedPublicURLResult extends WebAPICallResult {
-  file: {
-    permalink_public: string;
-  }
+  file: SlackFile
+}
+
+interface AuthTestResult extends WebAPICallResult {
+  user_id: string;
+  bot_id: string;
+}
+
+interface Message {
+  subtype?: string;
+  ts: string;
+  thread_ts: string;
+  type: string;
+  text?: string;
+  user?: string;
+  username?: string;
+  bot_id?: string;
+  upload?: boolean;
+  files?: SlackFile[]
+}
+
+interface ConversationsRepliesResult extends WebAPICallResult {
+  messages: Message[]
 }
 
 export default SlackController;

@@ -8,6 +8,11 @@ interface EstablishSessionData {
   channelId: string;
 }
 
+interface ReEstablishSessionData {
+  threadId: string;
+  channelId: string;
+}
+
 interface MessageData {
   text: string;
   image?: Buffer;
@@ -60,6 +65,24 @@ class SocketController {
           channelId: channelId ? channelId : 'C0111SXA24T'
         }); 
         if(cb) cb();
+      });
+
+      socket.on('reestablish_session', async ({threadId, channelId}: ReEstablishSessionData, cb: any) => {
+        try {
+          const data = await this.controller.reEstablisSession({
+            threadId,
+            channelId,
+            socketId: socket.id,
+          }); 
+          if(cb) cb({
+            threadId,
+            channelId,
+            name: data.name,
+            messages: data.messages
+          });
+        } catch (err) {
+          if (cb) cb({ error: 'Failed re-establishing session' });
+        }
       });
 
       socket.on('disconnect', () => {
