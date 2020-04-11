@@ -7,16 +7,16 @@
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Configuration](#configuration)
+  - [Slack app permissions](#slack-app-permissions)
+    - [Bot token scopes](#bot-token-scopes)
+    - [User token scopes](#user-token-scopes)
   - [Running locally](#running-locally)
   - [Building for production](#building-for-production)
   - [API documentation](#api-documentation)
-  - [Slack app permissions](#slack-app-permissions)
-    - [Bot Token Scopes](#bot-token-scopes)
-    - [User Token Scopes](#user-token-scopes)
 
 ## Prerequisites
 
-This application requires Node.js 10 or later.
+- Node.js 10.x or 12.x
 
 ## Installation
 
@@ -34,7 +34,22 @@ These environment variables need to be set for the user running the code. (This 
 - SLACK_BOT_TOKEN
 - SLACK_USER_TOKEN
 
-The values can be found on the config pages for the slack bot. This assumes a slack workspace has already been set up and a slack bot configured.
+The values can be found on the config pages for the slack app.
+
+## Slack app permissions
+
+These permissions need to be enabled on your Slack app:
+
+### Bot token scopes
+
+- channels:history
+- chat:write
+- chat:write.customize
+- users:read
+
+### User token scopes
+
+- files:write
 
 ## Running locally
 
@@ -42,25 +57,10 @@ Compile, start the local web server on port 3000, and recompile on changes
 `npm run watch-debug`
 
 ## Building for production
- 
+
 Compile TypeScript files into dist/ folder  
 `npm run build-ts`
 
 ## API documentation
 
 [API documentation](API.md)
-
-## Slack app permissions
-
-These permissions need to be enabled on your Slack app:
-
-### Bot Token Scopes
-
-- channels:history
-- chat:write
-- chat:write.customize
-- users:read
-
-### User Token Scopes
-
-- files:write
