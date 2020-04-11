@@ -17,6 +17,7 @@
 ## Prerequisites
 
 - Node.js 10.x or 12.x
+- Yarn 1.22.4
 
 ## Installation
 
@@ -24,7 +25,7 @@ Clone the repo
 `git clone https://github.com/dothemath-se/dothemath-app-backend.git`
 
 Install dependencies  
-`npm install`
+`yarn`
 
 ## Configuration
 
@@ -54,12 +55,12 @@ These permissions need to be enabled on your Slack app:
 ## Running locally
 
 Compile, start the local web server on port 3000, and recompile on changes  
-`npm run watch-debug`
+`yarn run watch-debug`
 
 ## Building for production
 
 Compile TypeScript files into dist/ folder  
-`npm run build-ts`
+`yarn run build-ts`
 
 ## API documentation
 
