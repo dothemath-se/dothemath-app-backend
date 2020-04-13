@@ -22,7 +22,7 @@ jobs:
     - run: yarn build-azure
 
     - name: 'Deploy to Azure Web App'
-      uses: azure/webapps-deploy@v1
+      uses: azure/webapps-deploy@v2
       with:
         app-name: 'dothemath-app-api'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_3051375fa3a44466aa191d36d89a4b9e }}
