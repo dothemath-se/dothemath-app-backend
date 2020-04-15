@@ -19,7 +19,6 @@
     "@types/cheerio": "^0.22.17",
     "@types/emoji-js": "^3.4.0",
     "@types/lodash": "^4.14.149",
-    "@types/prompts": "^2.0.5",
     "@types/socket.io": "^2.1.4",
     "concurrently": "^5.1.0",
     "nodemon": "^2.0.2",
@@ -32,7 +31,6 @@
     "cheerio": "^1.0.0-rc.3",
     "emoji-js": "^3.5.0",
     "lodash": "^4.17.15",
-    "prompts": "^2.3.2",
     "socket.io": "^2.3.0"
   }
 }
