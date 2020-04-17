@@ -42,7 +42,7 @@ class AppController {
 
   socket: SocketController;
   slack: SlackController;
-  server: Server;
+  server!: Server;
 
   sessions: Session[] = [];
 
@@ -60,7 +60,7 @@ class AppController {
   establishSession ({name, socketId, channelId}: EstablishSessionOptions) {
     const activeSession = this.sessions.find(session => session.socketId === socketId);
     if (activeSession) {
-      this.dropSession(activeSession.socketId);
+      this.dropSession(activeSession.socketId!);
     }
     
     this.sessions.push({
@@ -164,7 +164,7 @@ class AppController {
 
     if (session) {
       this.socket.sendMessage({
-        socketId: session.socketId,
+        socketId: session.socketId!,
         text,
         sender,
         senderAvatar,

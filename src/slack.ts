@@ -16,8 +16,8 @@ class SlackController {
   private app: App;
   controller: AppController;
 
-  private botId: string;
-  private botUserId: string;
+  private botId!: string;
+  private botUserId!: string;
   
   constructor (controller: AppController) {
     this.controller = controller;
@@ -51,7 +51,7 @@ class SlackController {
           token: context.botToken
         }) as UserInfoResult;
 
-        let imageURL: string;
+        let imageURL!: string;
 
         if (message.files) {
           const imageResponse = await this.app.client.files.sharedPublicURL({
@@ -60,11 +60,10 @@ class SlackController {
           }) as FilesSharedPublicURLResult;
           imageURL = await getImageURLFromSlackPage(imageResponse.file.permalink_public)
         }
-
         
         this.controller.handleMessageFromSlack({
           sender: userInfo.user.real_name,
-          text: parseEmojis(message.text),
+          text: parseEmojis(message.text!),
           threadId: message.thread_ts,
           senderAvatar: userInfo.user.profile.image_48,
           image: imageURL
@@ -111,7 +110,6 @@ class SlackController {
     
     return responses;
   }
-
   
   async getThread({threadId, channelId}: GetThreadOptions): Promise<GetThreadResult> {
     const response = await this.app.client.conversations.replies({
@@ -122,16 +120,15 @@ class SlackController {
 
     const { messages } = response;
 
-    let studentUsername: string;
+    let studentUsername!: string;
 
     const studentTextMessages = messages.filter(m => m.subtype && m.subtype === 'bot_message' && m.bot_id === this.botId);
     const studentImageMessages = messages.filter(m => m.upload && m.user === this.botUserId);
-
     
     if (studentTextMessages.length > 0) {
-      studentUsername = studentTextMessages[0].username;
+      studentUsername = studentTextMessages[0].username!;
     } else if (studentImageMessages.length > 0) {
-      const messageSplit = studentImageMessages[0].text.split('*');
+      const messageSplit = studentImageMessages[0].text!.split('*');
       studentUsername = messageSplit[1];
     }
 
@@ -142,10 +139,9 @@ class SlackController {
         ).map(userId => {
           return this.app.client.users.info({
             token: SLACK_BOT_TOKEN,
-            user: userId
+            user: userId!
           }) as Promise<UserInfoResult>})
     );
-
     
     const usernames = users.reduce((acc, cur) => {
       acc[cur.user.id] = cur.user.real_name;
@@ -156,7 +152,7 @@ class SlackController {
     const returnMessages = await Promise.all(messages.map(async message => {
       const isUser = (!!message.subtype && message.subtype === 'bot_message' && message.bot_id === this.botId)
                      || (!!message.upload && message.user === this.botUserId);
-      const name = isUser ? studentUsername : usernames[message.user];
+      const name = isUser ? studentUsername : usernames[message.user!];
       let text = '';
       let image = '';
 

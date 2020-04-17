@@ -31,7 +31,7 @@ class SocketController {
 
   controller: AppController;
 
-  io: SocketIO.Server;
+  io!: SocketIO.Server;
 
   constructor (controller: AppController) {
     this.controller = controller;
@@ -72,11 +72,11 @@ class SocketController {
 
       socket.on('reestablish_session', async ({threadId, channelId}: ReEstablishSessionData, cb: any) => {
         try {
-          const data = await this.controller.reEstablisSession({
+          const data = (await this.controller.reEstablisSession({
             threadId,
             channelId,
             socketId: socket.id,
-          }); 
+          }))!;
 
           console.log(data);
 
