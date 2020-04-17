@@ -1,28 +1,19 @@
 {
   "name": "dothemath-app-backend",
-  "author": "dothemath.se",
-  "license": "MIT",
   "private": true,
+  "license": "MIT",
+  "author": "dothemath.se",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch-node": "nodemon -w ./dist dist/index.js",
-    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
     "build-azure": "tsc --outDir .",
     "build-ts": "tsc",
-    "watch-ts": "tsc -w",
     "serve-debug": "nodemon -w ./dist --inspect dist/index.js",
-    "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\""
-  },
-  "devDependencies": {
-    "@types/cheerio": "^0.22.17",
-    "@types/emoji-js": "^3.4.0",
-    "@types/lodash": "^4.14.149",
-    "@types/socket.io": "^2.1.4",
-    "concurrently": "^5.1.0",
-    "nodemon": "^2.0.2",
-    "typescript": "^3.8.3"
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
+    "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\"",
+    "watch-node": "nodemon -w ./dist dist/index.js",
+    "watch-ts": "tsc -w"
   },
   "dependencies": {
     "@sentry/node": "^5.15.4",
@@ -32,5 +23,14 @@
     "emoji-js": "^3.5.0",
     "lodash": "^4.17.15",
     "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/cheerio": "^0.22.17",
+    "@types/emoji-js": "^3.4.0",
+    "@types/lodash": "^4.14.149",
+    "@types/socket.io": "^2.1.4",
+    "concurrently": "^5.1.0",
+    "nodemon": "^2.0.2",
+    "typescript": "^3.8.3"
   }
 }
