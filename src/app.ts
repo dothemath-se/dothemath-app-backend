@@ -4,6 +4,7 @@ import { Server } from 'http';
 import SocketController from './socket';
 import SlackController from './slack';
 import channels from './channels';
+import attachRootListener from './attachRootListener';
 
 interface Session {
   socketId?: string;
@@ -55,6 +56,7 @@ class AppController {
     const server = await this.slack.start();
     this.server = server;
     this.socket.attachToServer(server);
+    attachRootListener(server);
   }
 
   establishSession ({name, socketId, channelId}: EstablishSessionOptions) {
