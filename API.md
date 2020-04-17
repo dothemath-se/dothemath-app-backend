@@ -33,6 +33,25 @@ socket.emit('establish_session', {
 
 ___
 
+### reestablish_session
+
+Re-establishes a previous session/conversation by fetching messages from slack. Takes a callback which returns username and messages.
+Name | Type | Required | Description
+--- | --- | --- | ---
+threadId | string | * | Slack Thread Id
+channelId | string | * | Channel ID
+
+```javascript
+socket.emit('reestablish_session', {
+  threadId: '1287050862.014200',
+  channelId: 'C011ENW7TJQ'
+}, { name, messages} => {
+  
+});
+```
+
+___
+
 ### send_message
 
 Name | Type | Required | Description
