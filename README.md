@@ -1,21 +1,19 @@
 # dothemath.app backend
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dothemath-se_dothemath-app-backend&metric=alert_status)](https://sonarcloud.io/dashboard?id=dothemath-se_dothemath-app-backend)
-![ ](https://github.com/dothemath-se/dothemath-app-backend/workflows/Deploy%20to%20Azure/badge.svg)
+[![Deploy to Azure status](https://github.com/dothemath-se/dothemath-app-backend/workflows/Deploy%20to%20Azure/badge.svg)](https://github.com/dothemath-se/dothemath-app-backend/actions?query=workflow%3A%22Deploy+to+Azure%22)
 
 ## Table of Contents
 
-- [dothemath.app backend](#dothemathapp-backend)
-  - [Table of Contents](#table-of-contents)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Configuration](#configuration)
-  - [Slack app permissions](#slack-app-permissions)
-    - [Bot token scopes](#bot-token-scopes)
-    - [User token scopes](#user-token-scopes)
-  - [Running locally](#running-locally)
-  - [Building for production](#building-for-production)
-  - [API documentation](#api-documentation)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Slack app permissions](#slack-app-permissions)
+  - [Bot token scopes](#bot-token-scopes)
+  - [User token scopes](#user-token-scopes)
+- [Running locally](#running-locally)
+- [Building for production](#building-for-production)
+- [API documentation](#api-documentation)
 
 ## Prerequisites
 
