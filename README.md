@@ -1,8 +1,11 @@
-# dothemath.app backend ![](https://github.com/dothemath-se/dothemath-app-backend/workflows/Deploy%20to%20Azure/badge.svg)
+# dothemath.app backend
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=dothemath-se_dothemath-app-backend&metric=alert_status)](https://sonarcloud.io/dashboard?id=dothemath-se_dothemath-app-backend)
+![ ](https://github.com/dothemath-se/dothemath-app-backend/workflows/Deploy%20to%20Azure/badge.svg)
 
 ## Table of Contents
 
-- [dothemath.app backend !](#dothemathapp-backend)
+- [dothemath.app backend](#dothemathapp-backend)
   - [Table of Contents](#table-of-contents)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
