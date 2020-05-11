@@ -73,7 +73,7 @@ class AppController {
   }
 
   async reEstablisSession ({socketId, channelId, threadId}: ReEstablishSessionOptions) {
-    _.remove(this.sessions, session => session.channelId === channelId && session.threadId === threadId);
+    _.remove(this.sessions, session => session.socketId === socketId || (session.channelId === channelId && session.threadId === threadId));
     const threadData = await this.slack.getThread({ channelId, threadId });
     if (threadData) {
       this.sessions.push({

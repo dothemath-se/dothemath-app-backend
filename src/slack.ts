@@ -46,6 +46,8 @@ class SlackController {
       
       if (message.thread_ts) {
 
+        console.log(message);
+
         const userInfo = await this.app.client.users.info({
           user: message.user,
           token: context.botToken
@@ -171,7 +173,7 @@ class SlackController {
 
       return {
         isUser,
-        text,
+        text: parseEmojis(text),
         name,
         image
       };
