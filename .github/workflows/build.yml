@@ -1,18 +1,22 @@
-name: Deploy to Azure
+name: build
 
 on:
   push:
+    branches-ignore:
+      - master
+
+  pull_request:
     branches:
       - master
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-18.04
 
     steps:
     - uses: actions/checkout@master
 
-    - name: Set up Node.js version
+    - name: Use Node.js 12.13.0
       uses: actions/setup-node@v1
       with:
         node-version: '12.13.0'
@@ -22,14 +26,8 @@ jobs:
     - run: yarn build-azure
 
     # Building is done. Now reinstall only those packages needed to actually run the application.
+    # We only do this here for parity with the build-and-deploy script.
 
     - run: rm -rf node_modules
 
     - run: yarn install --production
-
-    - name: 'Deploy to Azure Web App'
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'dothemath-app-api'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_3051375fa3a44466aa191d36d89a4b9e }}
-        package: .
