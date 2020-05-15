@@ -22,6 +22,7 @@
     "cheerio": "^1.0.0-rc.3",
     "emoji-js": "^3.5.0",
     "lodash": "^4.17.15",
+    "rate-limiter-flexible": "^2.1.4",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
