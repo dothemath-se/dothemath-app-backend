@@ -1,5 +1,6 @@
 import http from 'http';
 import socketIO from 'socket.io';
+import { RateLimiterMemory } from 'rate-limiter-flexible';
 
 import AppController from './app';
 
@@ -30,11 +31,15 @@ interface SendMessageOptions {
 class SocketController {
 
   controller: AppController;
-
   io!: SocketIO.Server;
+  rateLimiter: RateLimiterMemory;
 
   constructor (controller: AppController) {
     this.controller = controller;
+    this.rateLimiter = new RateLimiterMemory({
+      points: 3,
+      duration: 3
+    });
   }
 
   attachToServer(server: http.Server) {
@@ -50,15 +55,26 @@ class SocketController {
 
       socket.on('send_message', async ({ text, image }: MessageData, cb: any) => {
 
-        const response = await this.controller.handleMessageFromClient({
-          text,
-          socketId: socket.id,
-          image
-        });
-        if (cb) cb({
-          ts: response.ts,
-          threadId: response.threadId
-        });
+        try {
+          await this.rateLimiter.consume(socket.id);
+          const response = await this.controller.handleMessageFromClient({
+            text,
+            socketId: socket.id,
+            image
+          });
+          if (cb) cb({
+            ts: response.ts,
+            threadId: response.threadId
+          });
+        } catch (err) {
+          if (err.msBeforeNext) {
+            const secondsBeforeNext = Math.ceil(err.msBeforeNext / 1000);
+            socket.emit('message', {
+              text: `Ditt meddelande blev blockerat då du skickar för många i snabb följd. Skriv hellre längre meddelanden än att skicka många korta. Försök igen om ${secondsBeforeNext} sekund${secondsBeforeNext > 1 ? 'er' : ''}.`,
+              name: "DoTheMath"
+            });
+          }
+        }
       });
 
       socket.on('establish_session', ({studentName, channelId}: EstablishSessionData, cb: any) => {
@@ -77,8 +93,6 @@ class SocketController {
             channelId,
             socketId: socket.id,
           }))!;
-
-          console.log(data);
 
           if(cb) cb({
             threadId,
