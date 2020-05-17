@@ -63,13 +63,22 @@ image | ArrayBuffer | |
 socket.emit('send_message', { text: 'Message from the web!' });
 ```
 
-### get_channels 
+___
 
-Takes a callback function. See [channel_list](#channel_list) for format of return value.
+### get_channels
+
+Get the list of all available Slack channels. Takes a callback which receives an array of channel objects:
+
+Name | Type | Description
+--- | --- | ---
+name | string | Channel name
+id | string | Channel ID
 
 ```javascript
 socket.emit('get_channels', channels => {
-  console.log(channels)
+  channels.forEach(channel => {
+    console.log(`${channel.id}: ${channel.name}`)
+  });
 });
 ```
 
