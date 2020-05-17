@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD024 -->
+
 # API documentation
 
 Enabling Socket.IO in frontend:
