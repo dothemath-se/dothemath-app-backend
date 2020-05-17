@@ -51,8 +51,6 @@ class SocketController {
 
     this.io.on('connection', socket => {
 
-      this.sendChannelList(socket.id);
-
       socket.on('send_message', async ({ text, image }: MessageData, cb: any) => {
 
         try {
@@ -116,15 +114,6 @@ class SocketController {
         }
       })
     })
-  }
-
-  async sendChannelList (socketId: string) {
-    const channels = this.controller.getChannels();
-    const socket = this.io.sockets.sockets[socketId];
-
-    if (socket) {
-      socket.emit('channel_list', channels);
-    }
   }
 
   async sendMessage ({sender, senderAvatar, text, socketId, image}: SendMessageOptions) {
