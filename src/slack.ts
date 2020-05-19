@@ -96,7 +96,7 @@ class SlackController {
     await this.app.client.files.sharedPublicURL({
       file: response.file.id,
       token: SLACK_USER_TOKEN
-    }) as FilesSharedPublicURLResult;
+    });
     
     response.ts = response.file.shares.public[channel][0].ts;
 
