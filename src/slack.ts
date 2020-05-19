@@ -46,8 +46,6 @@ class SlackController {
       
       if (message.thread_ts) {
 
-        console.log(message);
-
         const userInfo = await this.app.client.users.info({
           user: message.user,
           token: context.botToken
@@ -94,7 +92,12 @@ class SlackController {
       initial_comment: `*${username}*: ${text}`,
       file: image
     }) as FilesUploadResult;
-
+    
+    await this.app.client.files.sharedPublicURL({
+      file: response.file.id,
+      token: SLACK_USER_TOKEN
+    }) as FilesSharedPublicURLResult;
+    
     response.ts = response.file.shares.public[channel][0].ts;
 
     return response.file.shares.public[channel][0].ts;;
@@ -233,6 +236,7 @@ interface ChatPostMessageResult extends WebAPICallResult {
 
 interface FilesUploadResult extends WebAPICallResult {
   file: {
+    id: string;
     shares: {
       public: {
         [key: string]: {
