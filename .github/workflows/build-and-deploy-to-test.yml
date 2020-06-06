@@ -1,17 +1,12 @@
-name: build
+name: build-and-deploy-to-test
 
 on:
   push:
-    branches-ignore:
-      - master
+    branches:
       - test
 
-  pull_request:
-    branches:
-      - master
-
 jobs:
-  build:
+  build-and-deploy-to-test:
     runs-on: ubuntu-18.04
 
     steps:
@@ -27,8 +22,14 @@ jobs:
     - run: yarn build-azure
 
     # Building is done. Now reinstall only those packages needed to actually run the application.
-    # We only do this here for parity with the build-and-deploy script.
 
     - run: rm -rf node_modules
 
     - run: yarn install --production
+
+    - name: 'Deploy to Azure Web App'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'dothemath-app-api-test'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_b9ceaeaa6a0f490d9126fe1844e1b441 }}
+        package: .

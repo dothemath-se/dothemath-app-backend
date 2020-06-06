@@ -1,4 +1,4 @@
-name: build-and-deploy
+name: build-and-deploy-to-prod
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build-and-deploy:
+  build-and-deploy-to-prod:
     runs-on: ubuntu-18.04
 
     steps:
