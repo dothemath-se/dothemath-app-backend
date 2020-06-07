@@ -167,6 +167,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/dotenv-flow@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/dotenv-flow/-/dotenv-flow-3.0.0.tgz#2d25e66d2e99a8a1a1051f86392768ee391521aa"
+  integrity sha512-xH2wOIpScq+UEdZwxO7CgIKATy/wu96FTEeQ8RUlYsnnmylnXEh7rAMX4fTQJID2J3B15Aj+XLvm/aM2JuklMA==
+  dependencies:
+    "@types/node" "*"
+
 "@types/emoji-js@^3.4.0":
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/@types/emoji-js/-/emoji-js-3.4.0.tgz#fea0138600cb08bc7138f36bb93e50ec34aacac1"
@@ -794,6 +801,18 @@ dot-prop@^5.2.0:
   integrity sha512-uEUyaDKoSQ1M4Oq8l45hSE26SnTxL6snNnqvK/VWx5wJhmff5z0FUVJDKDanor/6w3kzE3i7XZOk+7wC0EXr1A==
   dependencies:
     is-obj "^2.0.0"
+
+dotenv-flow@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/dotenv-flow/-/dotenv-flow-3.1.0.tgz#2abcb4661cf2d0ca5b46d8ff5e95c1045ade9938"
+  integrity sha512-BMA8vfu2DbAx5x5G3C+tgb1hCbONggZTSpBE7B4yCPG5vziKX/lA3CzsjdGKlPvLxZgTbP1qb+KlWux8pYqsmA==
+  dependencies:
+    dotenv "^8.0.0"
+
+dotenv@^8.0.0:
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
+  integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
 
 duplexer3@^0.1.4:
   version "0.1.4"
