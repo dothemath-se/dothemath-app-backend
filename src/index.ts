@@ -1,3 +1,7 @@
+import dotenv from 'dotenv-flow';
+// This must be done before importing App.
+dotenv.config();
+
 import * as Sentry from '@sentry/node';
 import App from './app';
 
