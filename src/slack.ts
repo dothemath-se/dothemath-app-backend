@@ -5,11 +5,16 @@ import { Server } from 'http';
 import _ from 'lodash';
 import { parseEmojis, getImageURLFromSlackPage } from './utils';
 
-const SLACK_SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET;
+const PORT = process.env.PORT;
 const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN;
+const SLACK_SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET;
 const SLACK_USER_TOKEN = process.env.SLACK_USER_TOKEN;
 
-const PORT = process.env.PORT || 3000;
+console.debug('PORT', PORT);
+// These are secrets, so only log the last few characters.
+console.debug('SLACK_BOT_TOKEN', '...' + SLACK_BOT_TOKEN?.substring(SLACK_BOT_TOKEN.length - 4));
+console.debug('SLACK_SIGNING_SECRET', '...' + SLACK_SIGNING_SECRET?.substring(SLACK_SIGNING_SECRET.length - 4));
+console.debug('SLACK_USER_TOKEN', '...' + SLACK_USER_TOKEN?.substring(SLACK_USER_TOKEN.length - 4));
 
 class SlackController {
   

@@ -3,8 +3,10 @@ import { Server } from 'http';
 
 import SocketController from './socket';
 import SlackController from './slack';
-import channels from './channels';
 import attachRootListener from './attachRootListener';
+
+const SLACK_CHANNELS = JSON.parse(process.env.SLACK_CHANNELS!) as [{ id: string; }];
+console.debug('SLACK_CHANNELS', SLACK_CHANNELS);
 
 interface Session {
   socketId?: string;
@@ -84,7 +86,7 @@ class AppController {
       });
 
       return {
-        channel: channels.find(c => c.id === channelId),
+        channel: SLACK_CHANNELS.find((c) => c.id === channelId),
         threadId,
         name: threadData.username,
         messages: threadData.messages
@@ -110,7 +112,7 @@ class AppController {
   }
 
   getChannels() {
-    return channels;
+    return SLACK_CHANNELS;
   }
 
   /**
