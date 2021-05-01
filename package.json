@@ -5,15 +5,10 @@
   "author": "dothemath.se",
   "main": "index.js",
   "scripts": {
-    "build-azure": "tsc --outDir .",
-    "build-ts": "tsc",
-    "serve-debug": "nodemon -w ./dist --inspect dist/index.js",
-    "start": "node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
-    "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\"",
-    "watch-node": "nodemon -w ./dist dist/index.js",
-    "watch-ts": "tsc -w"
+    "dev": "nodemon --watch \"src/**\" --ext \"ts,json\" --exec \"ts-node src/index.ts\"",
+    "build": "rimraf dist && tsc --outDir dist",
+    "build:azure": "tsc --outDir .",
+    "serve": "node dist/index.js"
   },
   "dependencies": {
     "@sentry/node": "^6.3.4",
@@ -32,9 +27,11 @@
     "@types/dotenv-flow": "^3.1.0",
     "@types/emoji-js": "^3.5.0",
     "@types/lodash": "^4.14.168",
+    "@types/node": "^15.0.1",
     "@types/socket.io": "2.1.4",
-    "concurrently": "^6.0.2",
     "nodemon": "^2.0.7",
+    "rimraf": "^3.0.2",
+    "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
   }
 }

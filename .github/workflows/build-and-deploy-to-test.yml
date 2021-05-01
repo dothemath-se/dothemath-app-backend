@@ -19,7 +19,7 @@ jobs:
 
     - run: yarn install
 
-    - run: yarn build-azure
+    - run: yarn build:azure
 
     # Building is done. Now reinstall only those packages needed to actually run the application.
 
