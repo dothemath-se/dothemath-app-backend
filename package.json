@@ -14,7 +14,7 @@
     "@sentry/node": "^6.3.4",
     "@slack/bolt": "2.0.1",
     "axios": "^0.21.1",
-    "cheerio": "1.0.0-rc.3",
+    "cheerio": "^1.0.0-rc.6",
     "dotenv-flow": "^3.2.0",
     "emoji-js": "^3.5.0",
     "iconv-lite": "^0.6.2",
@@ -23,7 +23,7 @@
     "socket.io": "2.3.0"
   },
   "devDependencies": {
-    "@types/cheerio": "0.22.18",
+    "@types/cheerio": "^0.22.28",
     "@types/dotenv-flow": "^3.1.0",
     "@types/emoji-js": "^3.5.0",
     "@types/lodash": "^4.14.168",
