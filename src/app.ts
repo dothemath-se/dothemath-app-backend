@@ -8,16 +8,9 @@ import attachRootListener from './attachRootListener';
 import { fixAzureAppSettingsEncoding } from './fixAzureAppSettingsEncoding';
 
 const SLACK_CHANNELS_RAW = process.env.SLACK_CHANNELS!;
-console.debug('SLACK_CHANNELS_RAW', SLACK_CHANNELS_RAW);
-
 const SLACK_CHANNELS_FIX_AZURE_ENCODING = process.env.SLACK_CHANNELS_FIX_AZURE_ENCODING === 'true';
-console.debug('SLACK_CHANNELS_FIX_AZURE_ENCODING', SLACK_CHANNELS_FIX_AZURE_ENCODING);
-
 const SLACK_CHANNELS_FIXED = SLACK_CHANNELS_FIX_AZURE_ENCODING ? fixAzureAppSettingsEncoding(SLACK_CHANNELS_RAW) : SLACK_CHANNELS_RAW;
-console.debug('SLACK_CHANNELS_FIXED', SLACK_CHANNELS_FIXED);
-
 const SLACK_CHANNELS = JSON.parse(SLACK_CHANNELS_FIXED!) as [{ id: string; }];
-console.debug('SLACK_CHANNELS', SLACK_CHANNELS);
 
 interface Session {
   socketId?: string;

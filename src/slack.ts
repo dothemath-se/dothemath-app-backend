@@ -1,4 +1,4 @@
-import { App } from '@slack/bolt';
+import { App, GenericMessageEvent } from '@slack/bolt';
 import { WebAPICallResult } from '@slack/web-api';
 import AppController from './app';
 import { Server } from 'http';
@@ -10,13 +10,7 @@ const SLACK_BOT_TOKEN = process.env.SLACK_BOT_TOKEN;
 const SLACK_SIGNING_SECRET = process.env.SLACK_SIGNING_SECRET;
 const SLACK_USER_TOKEN = process.env.SLACK_USER_TOKEN;
 
-console.debug('PORT', PORT);
-// These are secrets, so only log the last few characters.
-console.debug('SLACK_BOT_TOKEN', '...' + SLACK_BOT_TOKEN?.substring(SLACK_BOT_TOKEN.length - 4));
-console.debug('SLACK_SIGNING_SECRET', '...' + SLACK_SIGNING_SECRET?.substring(SLACK_SIGNING_SECRET.length - 4));
-console.debug('SLACK_USER_TOKEN', '...' + SLACK_USER_TOKEN?.substring(SLACK_USER_TOKEN.length - 4));
-
-class SlackController {
+export default class SlackController {
   
   private app: App;
   controller: AppController;
@@ -36,31 +30,33 @@ class SlackController {
   }
 
   async start (): Promise<Server> {
-    const server = await this.app.start(PORT) as Server;
+    // Parsing PORT into a Number does not seem to work on Azure.
+    const server = await this.app.start(PORT as any);
     const { bot_id, user_id } = await this.app.client.auth.test({ token: SLACK_BOT_TOKEN }) as AuthTestResult;
     this.botId = bot_id;
     this.botUserId = user_id;
 
-    console.log(`⚡️ Bolt app is running on :${PORT}`);
+    console.log(`⚡️ Bolt app is running on http://localhost:${PORT}`);
     return server;
   }
 
   initEventListeners () {
 
     this.app.message(async ({message, context}) => {
+      // Current typings are (as of v3.3.0) incomplete and confusing. This is a fairly safe way around it.
+      const messageEvent = message as GenericMessageEvent
       
-      if (message.thread_ts) {
-
+      if (messageEvent.thread_ts) {
         const userInfo = await this.app.client.users.info({
-          user: message.user,
+          user: messageEvent.user,
           token: context.botToken
         }) as UserInfoResult;
 
         let imageURL!: string;
 
-        if (message.files) {
+        if (messageEvent.files) {
           const imageResponse = await this.app.client.files.sharedPublicURL({
-            file: message.files[0].id,
+            file: messageEvent.files[0].id,
             token: SLACK_USER_TOKEN
           }) as FilesSharedPublicURLResult;
           imageURL = await getImageURLFromSlackPage(imageResponse.file.permalink_public)
@@ -68,8 +64,8 @@ class SlackController {
         
         this.controller.handleMessageFromSlack({
           sender: userInfo.user.real_name,
-          text: parseEmojis(message.text!),
-          threadId: message.thread_ts,
+          text: parseEmojis(messageEvent.text!),
+          threadId: messageEvent.thread_ts,
           senderAvatar: userInfo.user.profile.image_48,
           image: imageURL
         });
@@ -300,5 +296,3 @@ interface Message {
 interface ConversationsRepliesResult extends WebAPICallResult {
   messages: Message[]
 }
-
-export default SlackController;
