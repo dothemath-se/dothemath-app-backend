@@ -31,7 +31,7 @@ interface SendMessageOptions {
 class SocketController {
 
   controller: AppController;
-  io!: SocketIO.Server;
+  io!: socketIO.Server;
   rateLimiter: RateLimiterMemory;
 
   constructor (controller: AppController) {
@@ -43,7 +43,14 @@ class SocketController {
   }
 
   attachToServer(server: http.Server) {
-    this.io = socketIO(server);
+    this.io = new socketIO.Server(server, {
+      allowEIO3: true,
+      cors: {
+        origin: true,
+        credentials: true,
+      },
+      serveClient: false
+    });
     this.initEventListeners();
   }
 
@@ -117,16 +124,12 @@ class SocketController {
   }
 
   async sendMessage ({sender, senderAvatar, text, socketId, image}: SendMessageOptions) {
-    const socket = this.io.sockets.sockets[socketId];
-
-    if (socket) {
-      socket.emit('message', {
-        text,
-        name: sender,
-        avatar: senderAvatar,
-        image
-      });
-    }
+    this.io.of('/').sockets.get(socketId)?.emit('message', {
+      text,
+      name: sender,
+      avatar: senderAvatar,
+      image
+    });
   }
 }
 
