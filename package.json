@@ -20,7 +20,7 @@
     "iconv-lite": "^0.6.2",
     "lodash": "^4.17.21",
     "rate-limiter-flexible": "^2.2.1",
-    "socket.io": "2.3.0"
+    "socket.io": "^4.0.1"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.28",
@@ -28,7 +28,6 @@
     "@types/emoji-js": "^3.5.0",
     "@types/lodash": "^4.14.168",
     "@types/node": "^15.0.1",
-    "@types/socket.io": "2.1.4",
     "nodemon": "^2.0.7",
     "rimraf": "^3.0.2",
     "ts-node": "^9.1.1",
