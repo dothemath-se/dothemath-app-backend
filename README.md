@@ -17,8 +17,8 @@
 
 ## Prerequisites
 
-- Node.js 10.x or 12.x
-- Yarn 1.22.4
+- Node.js 14.x
+- Yarn >=1.22.4 <2
 
 ## Installation
 
@@ -27,6 +27,16 @@ Clone the repo
 
 Install dependencies  
 `yarn`
+
+## Running locally
+
+Compile, start the local web server on port 3000, and recompile on changes  
+`yarn dev`
+
+## Building for production
+
+Compile TypeScript files into dist/ folder  
+`yarn build`
 
 ## Configuration
 
@@ -52,16 +62,6 @@ These permissions need to be enabled on your Slack app:
 ### User token scopes
 
 - files:write
-
-## Running locally
-
-Compile, start the local web server on port 3000, and recompile on changes  
-`yarn run watch-debug`
-
-## Building for production
-
-Compile TypeScript files into dist/ folder  
-`yarn run build-ts`
 
 ## API documentation
 
