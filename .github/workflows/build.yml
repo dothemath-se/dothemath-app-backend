@@ -3,12 +3,12 @@ name: build
 on:
   push:
     branches-ignore:
-      - master
+      - main
       - test
 
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   build:

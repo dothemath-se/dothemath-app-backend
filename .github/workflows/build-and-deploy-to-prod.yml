@@ -3,7 +3,7 @@ name: build-and-deploy-to-prod
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build-and-deploy-to-prod:
