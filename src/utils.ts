@@ -9,7 +9,7 @@ e.allow_native = true;
 export const parseEmojis = (text: string) => e.replace_colons(text);
 
 export const getImageURLFromSlackPage = async (url: string) => {
-  const imagePage = await axios.get(url);
+  const imagePage = await axios.get<Buffer>(url);
   const $ = cheerio.load(imagePage.data);
 
   return $('a.file_body.image_body img').attr('src')!;

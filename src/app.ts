@@ -133,7 +133,7 @@ class AppController {
 
     const { studentName, threadId, channelId } = session;
 
-    let ts;
+    let ts: string;
 
     if (image) {
       ts = await this.slack.postImageMessage({

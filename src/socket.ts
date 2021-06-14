@@ -58,7 +58,7 @@ class SocketController {
 
     this.io.on('connection', socket => {
 
-      socket.on('send_message', async ({ text, image }: MessageData, cb: any) => {
+      socket.on('send_message', async ({ text, image }: MessageData, cb: ({}) => void) => {
 
         try {
           await this.rateLimiter.consume(socket.id);
@@ -82,7 +82,7 @@ class SocketController {
         }
       });
 
-      socket.on('establish_session', ({studentName, channelId}: EstablishSessionData, cb: any) => {
+      socket.on('establish_session', ({studentName, channelId}: EstablishSessionData, cb: () => void) => {
         this.controller.establishSession({
           name: studentName,
           socketId: socket.id,
@@ -91,7 +91,7 @@ class SocketController {
         if(cb) cb();
       });
 
-      socket.on('reestablish_session', async ({threadId, channelId}: ReEstablishSessionData, cb: any) => {
+      socket.on('reestablish_session', async ({threadId, channelId}: ReEstablishSessionData, cb: ({}) => void) => {
         try {
           const data = (await this.controller.reEstablisSession({
             threadId,
@@ -114,7 +114,7 @@ class SocketController {
         this.controller.dropSession(socket.id);
       });
 
-      socket.on('get_channels', (cb: any) => {
+      socket.on('get_channels', (cb: ({}) => void) => {
         if (cb && typeof cb === 'function') {
           const channels = this.controller.getChannels();
           cb(channels);
