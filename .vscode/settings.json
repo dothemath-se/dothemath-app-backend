@@ -11,6 +11,7 @@
       "**/.git": true,
       "dist": true,
       "node_modules": true,
+      "coverage-ts": true,
       "yarn-error.log": true
     },
     "search.exclude": {
