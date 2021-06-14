@@ -58,7 +58,7 @@ class SocketController {
 
     this.io.on('connection', socket => {
 
-      socket.on('send_message', async ({ text, image }: MessageData, cb: any) => {
+      socket.on('send_message', async ({ text, image }: MessageData, cb?: (arg: Record<string, any>) => void) => {
 
         try {
           await this.rateLimiter.consume(socket.id);
@@ -67,7 +67,7 @@ class SocketController {
             socketId: socket.id,
             image
           });
-          if (cb) cb({
+          cb?.({
             ts: response.ts,
             threadId: response.threadId
           });
@@ -82,16 +82,16 @@ class SocketController {
         }
       });
 
-      socket.on('establish_session', ({studentName, channelId}: EstablishSessionData, cb: any) => {
+      socket.on('establish_session', ({studentName, channelId}: EstablishSessionData, cb?: () => void) => {
         this.controller.establishSession({
           name: studentName,
           socketId: socket.id,
           channelId: channelId ? channelId : 'C0111SXA24T'
         }); 
-        if(cb) cb();
+        cb?.();
       });
 
-      socket.on('reestablish_session', async ({threadId, channelId}: ReEstablishSessionData, cb: any) => {
+      socket.on('reestablish_session', async ({threadId, channelId}: ReEstablishSessionData, cb?: (arg: Record<string, any>) => void) => {
         try {
           const data = (await this.controller.reEstablisSession({
             threadId,
@@ -99,14 +99,14 @@ class SocketController {
             socketId: socket.id,
           }))!;
 
-          if(cb) cb({
+          cb?.({
             threadId,
             channel: data.channel,
             name: data.name,
             messages: data.messages
           });
         } catch (err) {
-          if (cb) cb({ error: 'Failed re-establishing session' });
+          cb?.({ error: 'Failed re-establishing session' });
         }
       });
 
@@ -114,11 +114,8 @@ class SocketController {
         this.controller.dropSession(socket.id);
       });
 
-      socket.on('get_channels', (cb: any) => {
-        if (cb && typeof cb === 'function') {
-          const channels = this.controller.getChannels();
-          cb(channels);
-        }
+      socket.on('get_channels', (cb?: (arg: Record<string, any>) => void) => {
+        cb?.(this.controller.getChannels());
       })
     })
   }
