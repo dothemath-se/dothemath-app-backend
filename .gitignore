@@ -103,3 +103,6 @@ dist
 .env.*.local
 
 coverage-ts
+
+# vim
+*.swp
