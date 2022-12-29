@@ -12,9 +12,9 @@
     "ts-coverage": "typescript-coverage-report"
   },
   "dependencies": {
-    "@sentry/node": "^6.3.5",
+    "@sentry/node": "^7.28.1",
     "@slack/bolt": "^3.4.0",
-    "axios": "^0.21.1",
+    "axios": "^1.2.2",
     "cheerio": "^1.0.0-rc.6",
     "dotenv-flow": "^3.2.0",
     "emoji-js": "^3.5.0",
@@ -33,7 +33,7 @@
     "rimraf": "^3.0.2",
     "ts-node": "^10.0.0",
     "typescript": "^4.9.4",
-    "typescript-coverage-report": "^0.6.0"
+    "typescript-coverage-report": "^0.7.0"
   },
   "typeCoverage": {
     "atLeast": 100,
