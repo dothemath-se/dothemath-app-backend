@@ -10,26 +10,26 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-    - uses: actions/checkout@master
+      - uses: actions/checkout@master
 
-    - name: Use Node.js 14.16.1
-      uses: actions/setup-node@v1
-      with:
-        node-version: '14.16.1'
+      - name: Use Node.js 18.12.1
+        uses: actions/setup-node@v1
+        with:
+          node-version: "18.12.1"
 
-    - run: yarn install
+      - run: yarn install
 
-    - run: yarn build:azure
+      - run: yarn build:azure
 
-    # Building is done. Now reinstall only those packages needed to actually run the application.
+      # Building is done. Now reinstall only those packages needed to actually run the application.
 
-    - run: rm -rf node_modules
+      - run: rm -rf node_modules
 
-    - run: yarn install --production
+      - run: yarn install --production
 
-    - name: 'Deploy to Azure Web App'
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'dothemath-app-api'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_3051375fa3a44466aa191d36d89a4b9e }}
-        package: .
+      - name: "Deploy to Azure Web App"
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "dothemath-app-api"
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_3051375fa3a44466aa191d36d89a4b9e }}
+          package: .
