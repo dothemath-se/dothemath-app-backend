@@ -28,11 +28,11 @@
     "@types/dotenv-flow": "^3.1.0",
     "@types/emoji-js": "^3.5.0",
     "@types/lodash": "^4.14.168",
-    "@types/node": "^15.0.1",
+    "@types/node": "^18.11.18",
     "nodemon": "^2.0.7",
     "rimraf": "^3.0.2",
     "ts-node": "^10.0.0",
-    "typescript": "^4.2.4",
+    "typescript": "^4.9.4",
     "typescript-coverage-report": "^0.6.0"
   },
   "typeCoverage": {
