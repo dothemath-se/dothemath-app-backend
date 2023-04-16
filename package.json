@@ -33,7 +33,7 @@
     "rimraf": "^3.0.2",
     "ts-node": "^10.0.0",
     "typescript": "^5.0.4",
-    "typescript-coverage-report": "^0.6.0"
+    "typescript-coverage-report": "^0.7.0"
   },
   "typeCoverage": {
     "atLeast": 100,
