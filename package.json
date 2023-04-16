@@ -30,7 +30,7 @@
     "@types/lodash": "^4.14.168",
     "@types/node": "^18.15.11",
     "nodemon": "^2.0.7",
-    "rimraf": "^3.0.2",
+    "rimraf": "^5.0.0",
     "ts-node": "^10.0.0",
     "typescript": "^5.0.4",
     "typescript-coverage-report": "^0.7.0"
