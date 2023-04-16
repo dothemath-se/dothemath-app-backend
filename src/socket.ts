@@ -71,7 +71,7 @@ class SocketController {
             ts: response.ts,
             threadId: response.threadId
           });
-        } catch (err) {
+          } catch (err: any) {
           if (err.msBeforeNext) {
             const secondsBeforeNext = Math.ceil(err.msBeforeNext / 1000);
             socket.emit('message', {
