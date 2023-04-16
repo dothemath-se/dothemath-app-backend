@@ -32,7 +32,7 @@
     "nodemon": "^2.0.7",
     "rimraf": "^3.0.2",
     "ts-node": "^10.0.0",
-    "typescript": "^4.2.4",
+    "typescript": "^5.0.4",
     "typescript-coverage-report": "^0.6.0"
   },
   "typeCoverage": {
