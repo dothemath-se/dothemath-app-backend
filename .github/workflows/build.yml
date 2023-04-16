@@ -15,22 +15,22 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-    - uses: actions/checkout@master
+      - uses: actions/checkout@master
 
-    - name: Use Node.js 14.16.1
-      uses: actions/setup-node@v1
-      with:
-        node-version: '14.16.1'
+      - name: Use Node.js 18.15.0
+        uses: actions/setup-node@v1
+        with:
+          node-version: "18.15.0"
 
-    - run: yarn install
+      - run: yarn install
 
-    - run: yarn ts-coverage
+      - run: yarn ts-coverage
 
-    - run: yarn build:azure
+      - run: yarn build:azure
 
-    # Building is done. Now reinstall only those packages needed to actually run the application.
-    # We only do this here for parity with the build-and-deploy script.
+      # Building is done. Now reinstall only those packages needed to actually run the application.
+      # We only do this here for parity with the build-and-deploy script.
 
-    - run: rm -rf node_modules
+      - run: rm -rf node_modules
 
-    - run: yarn install --production
+      - run: yarn install --production
